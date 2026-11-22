@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="hi" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>COMPUTER ACADEMY GOH – Computer Se Judi 100 Jobs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
+
+    body {
+      font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
+      background-color: #ffffff;
+      color: #0f172a;
+      overflow-x: hidden;
+    }
+
+    .job-card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+    .job-card:hover {
+      border-color: #2563eb;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+      transform: translateY(-2px);
+    }
+
+    @page {
+      size: A4 portrait;
+      margin: 12mm;
+    }
+
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #0f172a !important;
+      }
+      #app-shell, #job-modal-backdrop, #compare-modal-backdrop, #toast-box {
+        display: none !important;
+      }
+      #print-area {
+        display: block !important;
+      }
+    }
+
+    #print-area {
+      display: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-white text-slate-900">
+  <div id="toast-box" class="fixed bottom-4 right-4 z-[70] space-y-2 max-w-sm"></div>
+
+  <div id="app-shell" class="flex-1 flex flex-col bg-white">
+    <!-- 1. WHITE HEADER & NAVIGATION -->
+    <header class="sticky top-0 z-30 bg-white border-b border-slate-200">
+      <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+        <a href="#home" class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-blue-600 text-white flex items-center justify-center font-extrabold text-sm shrink-0">
+            CA
+          </div>
+          <div>
+            <div class="text-base sm:text-lg font-extrabold text-slate-900 leading-tight">
+              COMPUTER ACADEMY GOH
+            </div>
+            <div class="text-xs text-slate-600 font-medium">
+              Learn • Practice • Grow
+            </div>
+          </div>
+        </a>
+
+        <nav class="flex items-center gap-1.5 sm:gap-2 overflow-x-auto text-xs font-semibold">
+          <a href="#home" class="px-2.5 py-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-800 whitespace-nowrap">Home</a>
+          <a href="#jobs-section" onclick="filterByCategory('ALL')" class="px-2.5 py-1.5 rounded-md bg-blue-600 text-white whitespace-nowrap">All 100 Jobs</a>
+          <a href="#jobs-section" onclick="filterByCategory('IT & Software')" class="px-2.5 py-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-800 whitespace-nowrap">IT &amp; Software</a>
+          <a href="#jobs-section" onclick="filterByCategory('Hardware & Networking')" class="px-2.5 py-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-800 whitespace-nowrap">Hardware &amp; Networking</a>
+          <a href="#jobs-section" onclick="filterByCategory('Business & Office')" class="px-2.5 py-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-800 whitespace-nowrap">Business &amp; Office</a>
+          <a href="#jobs-section" onclick="filterByCategory('Government Jobs')" class="px-2.5 py-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-800 whitespace-nowrap">Government Jobs</a>
+          <a href="#about-academy" class="px-2.5 py-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-800 whitespace-nowrap">About Academy</a>
+          <a href="#contact-us" class="px-2.5 py-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-800 whitespace-nowrap">Contact Us</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- 2. HERO SECTION -->
+    <section id="home" class="max-w-7xl w-full mx-auto px-4 pt-8 pb-6">
+      <div class="bg-white border border-slate-200 rounded-xl p-6 sm:p-8 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+        <div class="space-y-2.5 max-w-3xl">
+          <span class="inline-block bg-blue-50 text-blue-700 border border-blue-200 text-xs font-bold px-3 py-1 rounded-full">
+            Computer Academy Goh – Career Guidance
+          </span>
+          <h1 class="text-2xl sm:text-4xl font-extrabold text-slate-900 leading-tight">
+            COMPUTER SE JUDI 100 JOBS
+          </h1>
+          <p class="text-sm sm:text-base font-semibold text-blue-700">
+            Salary + Qualification + Complete Syllabus + Career Guidance
+          </p>
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            कंप्यूटर से जुड़ी सभी 100 नौकरियों की जानकारी सरल हिंदी में देखें — योग्यता, कोर्स, पूरा सिलेबस, ज़रूरी सॉफ्टवेयर और स्किल्स, सैलरी अनुमान, करियर ग्रोथ और इंटरव्यू सवाल।
+          </p>
+          <div class="pt-2 flex flex-wrap gap-2.5">
+            <a href="#jobs-section" class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-lg">
+              EXPLORE ALL 100 JOBS
+            </a>
+            <button type="button" onclick="openCompareDrawer()" class="bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 font-semibold text-xs sm:text-sm px-4 py-2.5 rounded-lg">
+              Compare Jobs (<span id="compare-count">0</span>/2)
+            </button>
+            <button type="button" onclick="filterFavourites()" class="bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 font-semibold text-xs sm:text-sm px-4 py-2.5 rounded-lg">
+              Saved Favourites (<span id="fav-count">0</span>)
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 flex items-center gap-4 shrink-0">
+          <div class="w-14 h-14 rounded-lg bg-blue-600 text-white flex items-center justify-center">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <rect x="3" y="4" width="18" height="12" rx="2"/>
+              <path d="M8 20h8m-4-4v4" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div>
+            <div class="text-lg font-extrabold text-slate-900">100 Jobs</div>
+            <div class="text-xs text-slate-600">4 Categories • Hindi Details</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. SEARCH AND FILTER SYSTEM -->
+    <section id="jobs-section" class="max-w-7xl w-full mx-auto px-4 space-y-5">
+      <div class="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
+          <div class="md:col-span-6">
+            <label class="block text-xs font-bold text-slate-700 mb-1">Search Job Name, Qualification, Salary, Skills or Course</label>
+            <input
+              id="job-search-input"
+              type="text"
+              placeholder="जैसे: Developer, Tally, BCA, 12th Pass, Cyber, SSC..."
+              class="w-full rounded-lg bg-white border border-slate-300 px-3.5 py-2 text-sm text-slate-900 focus:outline-none focus:border-blue-600"
+            />
+          </div>
+          <div class="md:col-span-3">
+            <label class="block text-xs font-bold text-slate-700 mb-1">Category Filter</label>
+            <select id="category-select" class="w-full rounded-lg bg-white border border-slate-300 px-3 py-2 text-sm text-slate-900">
+              <option value="ALL">All 100 Jobs</option>
+              <option value="IT & Software">1–25: IT &amp; Software Jobs</option>
+              <option value="Hardware & Networking">26–50: Hardware &amp; Networking Jobs</option>
+              <option value="Business & Office">51–75: Business &amp; Office Support Jobs</option>
+              <option value="Government Jobs">76–100: Government &amp; Other Jobs</option>
+            </select>
+          </div>
+          <div class="md:col-span-3">
+            <label class="block text-xs font-bold text-slate-700 mb-1">Qualification Filter</label>
+            <select id="qual-select" class="w-full rounded-lg bg-white border border-slate-300 px-3 py-2 text-sm text-slate-900">
+              <option value="ALL">All Qualifications</option>
+              <option value="12th Pass">12th Pass</option>
+              <option value="Graduate">Graduate</option>
+              <option value="Diploma">Diploma</option>
+              <option value="BCA">BCA</option>
+              <option value="B.Tech">B.Tech</option>
+              <option value="Beginner Friendly">Beginner Friendly</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-1 text-xs">
+          <div class="flex flex-wrap gap-1.5">
+            <button type="button" onclick="setQuickFilter('ALL', 'ALL')" class="px-3 py-1 rounded-full bg-blue-600 text-white font-bold">All (100)</button>
+            <button type="button" onclick="setQuickFilter('IT & Software', 'ALL')" class="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold">IT &amp; Software</button>
+            <button type="button" onclick="setQuickFilter('Hardware & Networking', 'ALL')" class="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold">Hardware &amp; Networking</button>
+            <button type="button" onclick="setQuickFilter('Business & Office', 'ALL')" class="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold">Business &amp; Office</button>
+            <button type="button" onclick="setQuickFilter('Government Jobs', 'ALL')" class="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold">Government Jobs</button>
+            <button type="button" onclick="setQuickFilter('ALL', 'Beginner Friendly')" class="px-3 py-1 rounded-full bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-semibold">Beginner Friendly</button>
+          </div>
+          <div id="jobs-result-count" class="font-semibold text-slate-600">Showing 100 of 100 jobs</div>
+        </div>
+      </div>
+
+      <!-- 3 & 4. FOUR CATEGORIES & CLICKABLE JOB CARDS -->
+      <div id="categories-render-area" class="space-y-8"></div>
+    </section>
+
+    <!-- 9. JOB PREPARATION GUIDE (HOW TO GET A COMPUTER JOB?) -->
+    <section class="max-w-7xl w-full mx-auto px-4 mt-10">
+      <div class="bg-white border border-slate-200 rounded-xl p-6 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
+          <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">HOW TO GET A COMPUTER JOB?</h2>
+          <span class="text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200 px-3 py-1 rounded-full">8 Steps (हिंदी में)</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 text-xs sm:text-sm">
+          <div class="bg-slate-50 border border-slate-200 rounded-lg p-3.5">
+            <div class="font-bold text-blue-700">1. Learn Computer Fundamentals</div>
+            <p class="text-slate-600 mt-1">कंप्यूटर के बेसिक पार्ट्स, फाइल मैनेजमेंट, शॉर्टकट्स और टाइपिंग की मजबूत नींव बनाएं।</p>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 rounded-lg p-3.5">
+            <div class="font-bold text-blue-700">2. Complete Relevant Computer Course</div>
+            <p class="text-slate-600 mt-1">अपनी पसंद की फील्ड के अनुसार DCA, ADCA, Tally, Web, Coding या Networking कोर्स पूरा करें।</p>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 rounded-lg p-3.5">
+            <div class="font-bold text-blue-700">3. Learn Job-Specific Software</div>
+            <p class="text-slate-600 mt-1">संबंधित नौकरी में इस्तेमाल होने वाले सॉफ्टवेयर, टूल्स या लैंग्वेज पर प्रैक्टिस करें।</p>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 rounded-lg p-3.5">
+            <div class="font-bold text-blue-700">4. Develop Practical Skills</div>
+            <p class="text-slate-600 mt-1">लैब में रोज़ाना प्रैक्टिकल करके स्पीड, शुद्धता और समस्या हल करने की क्षमता बढ़ाएं।</p>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 rounded-lg p-3.5">
+            <div class="font-bold text-blue-700">5. Create Projects</div>
+            <p class="text-slate-600 mt-1">अपनी स्किल्स दिखाने के लिए 2–3 छोटे प्रैक्टिकल प्रोजेक्ट्स, शीट्स, डिज़ाइन या ऐप/वेब डेमो बनाएं।</p>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 rounded-lg p-3.5">
+            <div class="font-bold text-blue-700">6. Prepare Your Resume</div>
+            <p class="text-slate-600 mt-1">साफ-सुथरा रिज्यूमे तैयार करें जिसमें अपनी योग्यता, कोर्स, सॉफ्टवेयर और प्रोजेक्ट्स स्पष्ट लिखें।</p>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 rounded-lg p-3.5">
+            <div class="font-bold text-blue-700">7. Practice Interview Questions</div>
+            <p class="text-slate-600 mt-1">बेसिक कॉन्सेप्ट्स, प्रैक्टिकल टास्क और सामान्य इंटरव्यू सवालों के जवाब बोलकर अभ्यास करें।</p>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 rounded-lg p-3.5">
+            <div class="font-bold text-blue-700">8. Apply for Suitable Vacancies</div>
+            <p class="text-slate-600 mt-1">प्राइवेट कंपनियों, लोकल ऑफ़िस या सरकारी भर्ती नोटिफिकेशन के अनुसार सही पदों पर आवेदन करें।</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 12. COMPUTER ACADEMY GOH PROMOTION -->
+    <section id="about-academy" class="max-w-7xl w-full mx-auto px-4 mt-8">
+      <div class="bg-slate-50 border border-slate-200 rounded-xl p-6 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+        <div class="space-y-1">
+          <span class="text-xs font-bold text-blue-700 uppercase">LEARN TODAY, LEAD TOMORROW</span>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">COMPUTER ACADEMY GOH</h2>
+          <p class="text-xs sm:text-sm text-slate-600">
+            Expert Faculty • 100% Practical Training • Career Guidance • Computer Courses • Job Preparation
+          </p>
+        </div>
+        <a
+          href="https://bk2826194-art.github.io/Addmission-form-/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm px-6 py-3 rounded-lg whitespace-nowrap"
+        >
+          ENROLL NOW →
+        </a>
+      </div>
+    </section>
+
+    <!-- CONTACT US FOOTER -->
+    <footer id="contact-us" class="bg-white text-slate-600 border-t border-slate-200 mt-10 py-5 px-4 text-xs">
+      <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <strong class="text-slate-900">COMPUTER ACADEMY GOH</strong> – Near Bus Stand, Goh Rafiganj Road, Goh (Aurangabad), Bihar
+        </div>
+        <div>
+          Director: <strong>Ranjan Sharma</strong> | Contact: <strong>9556060616</strong> | Website: <strong>www.cabihar.in</strong>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- COMPLETE JOB DETAIL MODAL (15 HINDI SECTIONS + SYLLABUS + PRINT + PDF + SHARE) -->
+  <div id="job-modal-backdrop" class="fixed inset-0 z-50 hidden bg-slate-900/50 items-center justify-center p-3 sm:p-6">
+    <div class="bg-white border border-slate-300 rounded-xl max-w-4xl w-full max-h-[92vh] overflow-y-auto p-5 sm:p-7 space-y-5 text-slate-900 shadow-xl">
+      <div class="flex items-start justify-between gap-3 border-b border-slate-200 pb-3">
+        <div>
+          <span id="modal-cat-badge" class="inline-block bg-blue-50 text-blue-700 border border-blue-200 text-xs font-bold px-2.5 py-0.5 rounded-full"></span>
+          <h3 id="modal-job-title" class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1"></h3>
+        </div>
+        <button type="button" onclick="closeJobModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs px-3 py-1.5 rounded-lg">✕ बंद करें</button>
+      </div>
+
+      <div class="flex flex-wrap gap-2">
+        <button type="button" id="btn-modal-print" class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-4 py-2 rounded-lg">
+          PRINT JOB DETAILS
+        </button>
+        <button type="button" id="btn-modal-pdf" class="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs px-4 py-2 rounded-lg">
+          DOWNLOAD JOB DETAILS PDF
+        </button>
+        <button type="button" id="btn-modal-fav" class="bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 font-semibold text-xs px-3.5 py-2 rounded-lg">
+          ★ Favourite
+        </button>
+        <button type="button" id="btn-modal-compare" class="bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 font-semibold text-xs px-3.5 py-2 rounded-lg">
+          ⇄ Compare Job
+        </button>
+        <button type="button" id="btn-modal-share" class="bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 font-semibold text-xs px-3.5 py-2 rounded-lg">
+          ↗ Share
+        </button>
+      </div>
+
+      <div id="modal-job-content" class="space-y-4 text-xs sm:text-sm leading-relaxed"></div>
+    </div>
+  </div>
+
+  <!-- COMPARE MODAL -->
+  <div id="compare-modal-backdrop" class="fixed inset-0 z-50 hidden bg-slate-900/50 items-center justify-center p-4">
+    <div class="bg-white border border-slate-300 rounded-xl max-w-4xl w-full max-h-[88vh] overflow-y-auto p-6 space-y-4 text-slate-900 shadow-xl">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+        <h3 class="text-lg font-extrabold text-slate-900">Compare Two Computer Jobs (तुलना करें)</h3>
+        <button type="button" onclick="closeCompareModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold px-3 py-1 rounded-lg">✕ Close</button>
+      </div>
+      <div id="compare-modal-body" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs"></div>
+    </div>
+  </div>
+
+  <!-- PRINT STAGING AREA -->
+  <div id="print-area"></div>
+
+  <script>
+    const RAW_JOB_TITLES = {
+      'IT & Software': [
+        'Software Developer', 'Web Developer', 'App Developer', 'Data Scientist', 'AI Engineer',
+        'Machine Learning Engineer', 'Cloud Engineer', 'DevOps Engineer', 'Cyber Security Expert', 'Ethical Hacker',
+        'IT Consultant', 'System Analyst', 'Software Tester', 'Database Developer', 'Database Administrator',
+        'Network Engineer', 'Mobile App Tester', 'UI/UX Developer', 'Game Developer', 'Blockchain Developer',
+        'Full Stack Developer', 'Backend Developer', 'Frontend Developer', '.NET Developer', 'PHP Developer'
+      ],
+      'Hardware & Networking': [
+        'Hardware Engineer', 'Network Administrator', 'LAN Engineer', 'Field Technician', 'Computer Operator',
+        'IT Support Specialist', 'Help Desk Executive', 'Technical Support Engineer', 'CCTV Technician', 'Security Analyst',
+        'System Administrator', 'Cloud Support Engineer', 'Router Specialist', 'Switch Engineer', 'Printer Technician',
+        'Data Center Engineer', 'Storage Administrator', 'Server Administrator', 'Wireless Engineer', 'Telecom Engineer',
+        'Technical Field Engineer', 'IT Auditor', 'Quality Assurance Engineer', 'Embedded Engineer', 'Robotics Engineer'
+      ],
+      'Business & Office': [
+        'Data Entry Operator', 'MIS Executive', 'Office Assistant', 'Accountant', 'Cashier',
+        'Billing Executive', 'HR Executive', 'Sales Executive', 'Digital Marketing Executive', 'Content Writer',
+        'SEO Executive', 'Social Media Manager', 'Business Analyst', 'Project Manager', 'Operations Manager',
+ 'Business Development Executive', 'Office Administrator', 'Receptionist', 'Travel Executive', 'Admin Executive'
+      ],
+      'Government Jobs': [
+        'SSC CGL (Computer)', 'IBPS Clerk', 'Bank PO (Computer)', 'Railways (Computer)', 'DRDO Scientist',
+        'ISRO Scientist', 'NIC Scientist', 'Army (IT)', 'Navy (IT)', 'Air Force (IT)',
+        'Police (Cyber Cell)', 'Income Tax Inspector', 'Customs Officer', 'RBI Grade B', 'SBI Specialist Officer',
+        'TCS (IT Job)', 'Infosys (IT Job)', 'Wipro (IT Job)', 'HCL (IT Job)', 'Google (IT Job)',
+        'Microsoft (IT Job)', 'DRDO (Technical)', 'BHEL (Computer)', 'ONGC (IT)', 'BSNL (IT)'
+      ]
+    };
+
+    function buildAll100Jobs() {
+      const jobs = [];
+      let idCounter = 1;
+
+      for (const [category, titles] of Object.entries(RAW_JOB_TITLES)) {
+        titles.forEach((title, idx) => {
+          const isGov = category === 'Government Jobs';
+          const isHw = category === 'Hardware & Networking';
+          const isBiz = category === 'Business & Office';
+
+          const fresherMin = isGov ? 28000 : isHw ? 12000 : isBiz ? 10000 : 18000;
+          const fresherMax = isGov ? 55000 : isHw ? 22000 : isBiz ? 18000 : 35000;
+          const expMin = isGov ? 55000 : isHw ? 26000 : isBiz ? 22000 : 45000;
+          const expMax = isGov ? 110000 : isHw ? 50000 : isBiz ? 42000 : 120000;
+
+          const monthlyRange = `₹${fresherMin.toLocaleString('en-IN')} – ₹${expMax.toLocaleString('en-IN')}`;
+          const fresherSal = `₹${fresherMin.toLocaleString('en-IN')} – ₹${fresherMax.toLocaleString('en-IN')} / माह`;
+          const expSal = `₹${expMin.toLocaleString('en-IN')} – ₹${expMax.toLocaleString('en-IN')} / माह`;
+          const annualEst = `₹${(fresherMin * 12).toLocaleString('en-IN')} – ₹${(expMax * 12).toLocaleString('en-IN')} / वर्ष (अनुमानित)`;
+
+          const qualTags = [];
+          let qualText = '';
+          let courseText = '';
+          let beginnerFriendly = false;
+
+          if (isBiz) {
+            qualText = idx < 10 ? '12th Pass / Graduate (12वीं पास या स्नातक)' : 'Graduate (स्नातक)';
+            courseText = idx < 6 ? 'ADCA, DCA, Tally with GST, MS Office' : 'BCA, BBA, Digital Marketing / Office Course';
+            qualTags.push('12th Pass', 'Graduate');
+            if (idx < 12) { qualTags.push('Beginner Friendly'); beginnerFriendly = true; }
+          } else if (isHw) {
+            qualText = idx < 8 ? '12th Pass / Diploma (12वीं पास या डिप्लोमा)' : 'Diploma / B.Tech / BCA';
+            courseText = idx < 8 ? 'Hardware & Networking, CCNA, Computer Basics' : 'Networking Diploma, Cloud & System Admin';
+            qualTags.push('Diploma', '12th Pass');
+            if (idx < 7) { qualTags.push('Beginner Friendly'); beginnerFriendly = true; }
+          } else if (isGov) {
+            qualText = idx < 4 || (idx >= 7 && idx <= 12) ? 'Graduate (स्नातक)' : 'B.Tech / MCA / M.Sc / Graduate (नोटिफिकेशन अनुसार)';
+            courseText = 'CCC / O Level / DCA / BCA / B.Tech (पद के अनुसार)';
+            qualTags.push('Graduate', 'B.Tech');
+          } else {
+            qualText = idx >= 1 && idx <= 2 || idx === 22 ? 'BCA / B.Tech / Diploma / Relevant Skills' : 'BCA / B.Tech / MCA / Computer Degree';
+            courseText = 'BCA, B.Tech (CSE/IT), Full Stack / Software / AI Course';
+            qualTags.push('BCA', 'B.Tech', 'Diploma');
+          }
+
+          const softwareList = isBiz
+            ? ['MS Excel (एक्सेल)', 'MS Word & PowerPoint (ऑफिस टूल्स)', 'Tally Prime (अकाउंटिंग सॉफ्टवेयर)', 'Google Sheets / Canva / CRM (क्लाउड व टूल्स)']
+            : isHw
+            ? ['Windows & Linux OS (ऑपरेटिंग सिस्टम)', 'Cisco Packet Tracer (नेटवर्क सिमुलेशन)', 'System Diagnostics & BIOS Tools (हार्डवेयर जांच)', 'Remote Support & Monitoring Tools (मॉनिटरिंग)']
+            : isGov
+            ? ['MS Office & Typing Tools (ऑफिस व टाइपिंग)', 'Database & Networking Basics (डेटाबेस व नेटवर्क)', 'Official Portal & Cyber Tools (विभागीय टूल्स)', 'Aptitude & Domain Software (विषय आधारित टूल्स)']
+            : ['VS Code / IDE (कोड एडिटर)', 'Git & GitHub (वर्जन कंट्रोल)', 'Database (SQL / NoSQL)', 'Framework / Cloud / AI Tools (तकनीक अनुसार)'];
+
+          const skillsList = isBiz
+            ? ['डेटा शुद्धता (Accuracy)', 'एक्सेल रिपोर्टिंग (MIS)', 'कम्युनिकेशन स्किल (Communication)', 'समय प्रबंधन (Time Management)']
+            : isHw
+            ? ['ट्रबलशूटिंग (Troubleshooting)', 'नेटवर्क कॉन्फ़िगरेशन (Networking)', 'हार्डवेयर असेंबली (Hardware Setup)', 'धैर्य व त्वरित समाधान (Problem Solving)']
+            : isGov
+            ? ['सामान्य ज्ञान व रीजनिंग (Aptitude & Reasoning)', 'कंप्यूटर जागरूकता (Computer Awareness)', 'नियमों की समझ (Rule & Policy Knowledge)', 'अनुशासन व सटीकता (Discipline)']
+            : ['लॉजिक व प्रॉब्लम सॉल्विंग (Problem Solving)', 'कोडिंग व आर्किटेक्चर (Coding & Design)', 'डिबगिंग व टेस्टिंग (Debugging)', 'निरंतर सीखने की आदत (Continuous Learning)'];
+
+          const syllabusItems = isBiz
+            ? [
+                { topic: 'Computer Fundamentals (कंप्यूटर की मूल बातें)', desc: 'कंप्यूटर परिचय, फाइल फोल्डर, शॉर्टकट्स और बेसिक सिस्टम उपयोग।' },
+                { topic: 'MS Office – Word, Excel, PowerPoint', desc: 'डॉक्यूमेंट फॉर्मेटिंग, एक्सेल फॉर्मूला, चार्ट्स और प्रेजेंटेशन बनाना।' },
+                { topic: 'Data & MIS / Accounting Basics', desc: 'डेटा एंट्री, बिलिंग, लेज़र, रिपोर्टिंग और रिकॉर्ड प्रबंधन।' },
+                { topic: 'Role-Specific Workflow & Reporting', desc: `${title} के अनुसार दैनिक रिपोर्ट, ग्राहक/टीम समन्वय और प्रैक्टिकल केस स्टडी।` }
+              ]
+            : isHw
+            ? [
+                { topic: 'PC Hardware & Peripherals', desc: 'मदरबोर्ड, रैम, एसएसडी, प्रिंटर, सीसीटीवी और अन्य डिवाइस की पहचान व सेटअप।' },
+                { topic: 'Operating Systems (Windows / Linux)', desc: 'इंस्टॉलेशन, यूज़र परमिशन, ड्राइवर सेटअप और सिस्टम मेंटेनेंस।' },
+                { topic: 'Networking Fundamentals (LAN / WAN / IP)', desc: 'राउटर, स्विच, केबलिंग, आईपी एड्रेसिंग और नेटवर्क सुरक्षा की समझ।' },
+                { topic: `${title} Practical Troubleshooting`, desc: 'रियल-टाइम फॉल्ट पहचान, बैकअप और तकनीकी सहायता का प्रैक्टिकल अभ्यास।' }
+              ]
+            : isGov
+            ? [
+                { topic: 'General Awareness & Quantitative Aptitude', desc: 'करंट अफेयर्स, गणित, रीजनिंग और परीक्षा पैटर्न के अनुसार अभ्यास।' },
+                { topic: 'Computer Knowledge & Digital Literacy', desc: 'कंप्यूटर बेसिक्स, नेटवर्किंग, ऑफिस टूल्स और साइबर सुरक्षा की जानकारी।' },
+                { topic: 'Core Technical / Domain Subjects', desc: `${title} की भर्ती परीक्षा या चयन प्रक्रिया के अनुसार मुख्य विषय।` },
+                { topic: 'Mock Tests & Interview / Skill Test', desc: 'पिछले प्रश्नपत्र, टाइपिंग/प्रैक्टिकल टेस्ट और इंटरव्यू की तैयारी।' }
+              ]
+            : [
+                { topic: 'Computer Fundamentals & Logic Building', desc: 'कंप्यूटर कार्यप्रणाली, फ्लोचार्ट, लॉजिक और बेसिक प्रोग्रामिंग नींव।' },
+                { topic: 'Programming Languages & Core Concepts', desc: `${title} से जुड़ी मुख्य भाषाएं, डेटा स्ट्रक्चर, एल्गोरिदम या वेब/ऐप/डेटा कॉन्सेप्ट्स।` },
+                { topic: 'Databases & System Architecture', desc: 'डेटा स्टोरेज, क्वेरीज़, एपीआई, सुरक्षा और परफॉर्मेंस ऑप्टिमाइज़ेशन।' },
+                { topic: 'Live Project & Deployment', desc: 'असली प्रोजेक्ट बनाना, बग फिक्स करना और पोर्टफोलियो तैयार करना।' }
+              ];
+
+          jobs.push({
+            id: idCounter,
+            code: `JOB-${String(idCounter).padStart(3, '0')}`,
+            title,
+            category,
+            qualText,
+            qualTags,
+            beginnerFriendly,
+            courseText,
+            monthlyRange,
+            fresherSal,
+            expSal,
+            annualEst,
+            meaning: `${title} में संबंधित सिस्टम, डेटा, नेटवर्क या प्रोजेक्ट को सुचारु रूप से चलाने और बेहतर बनाने का कार्य किया जाता है।`,
+            duties: `इस पद पर ${title} के रूप में दैनिक कार्य, तकनीकी/ऑफिस समस्या का समाधान, रिपोर्ट/प्रोजेक्ट तैयार करना और टीम के साथ समन्वय करना शामिल होता है।`,
+            softwareList,
+            skillsList,
+            syllabusItems,
+            preparation: `सबसे पहले बेसिक कंप्यूटर और ${title} से जुड़े मुख्य कोर्स/सॉफ्टवेयर सीखें। रोज़ाना प्रैक्टिकल करें, 1–2 प्रोजेक्ट बनाएं और संबंधित परीक्षा या इंटरव्यू की तैयारी करें।`,
+            fresherScope: beginnerFriendly
+              ? 'शुरुआती (Fresher) उम्मीदवारों के लिए अच्छे अवसर उपलब्ध हैं, बशर्ते बेसिक प्रैक्टिकल और स्पीड/स्किल मजबूत हो।'
+              : 'Fresher के लिए इंटर्नशिप, जूनियर ट्रेनी या एंट्री-लेवल पदों पर अवसर मिलते हैं; मजबूत प्रोजेक्ट्स से चयन आसान होता है।',
+            sectorType: isGov
+              ? 'मुख्यतः सरकारी / सार्वजनिक उपक्रम (PSU) या बड़ी तकनीकी कंपनियों की भर्ती प्रक्रिया के अनुसार (कुछ पद प्राइवेट/कॉन्ट्रैक्ट में भी हो सकते हैं)।'
+              : 'मुख्यतः प्राइवेट सेक्टर (IT कंपनियां, ऑफ़िस, एजेंसी, स्टार्टअप या लोकल बिज़नेस) में उपलब्ध, और कुछ भूमिकाएं सरकारी विभागों में भी होती हैं।',
+            careerGrowth: `अनुभव, सर्टिफिकेशन और प्रदर्शन बढ़ने के साथ सीनियर विशेषज्ञ, लीड/मैनेजर या कंसल्टेंट स्तर तक करियर ग्रोथ संभव है।`,
+            interviewQuestions: [
+              `1. "${title}" की मुख्य ज़िम्मेदारियां क्या हैं और आप इसे कैसे निभाएंगे?`,
+              `2. इस भूमिका में आने वाली सामान्य समस्याओं को आप कैसे हल करते हैं?`,
+              `3. आपने कौन-सा प्रैक्टिकल प्रोजेक्ट या लैब कार्य किया है?`
+            ],
+            beginnerStart: `Beginner को सबसे पहले कंप्यूटर बेसिक्स, संबंधित कोर्स (${courseText}) और रोज़ाना कम से कम 1–2 घंटे प्रैक्टिकल लैब से शुरुआत करनी चाहिए।`
+          });
+          idCounter++;
+        });
+      }
+      return jobs;
+    }
+
+    const ALL_JOBS = buildAll100Jobs();
+
+    let state = {
+      search: '',
+      category: 'ALL',
+      qual: 'ALL',
+      onlyFavs: false,
+      favs: JSON.parse(localStorage.getItem('cag_fav_jobs') || '[]'),
+      compareIds: JSON.parse(localStorage.getItem('cag_compare_jobs') || '[]'),
+      activeJobId: null
+    };
+
+    function savePrefs() {
+      localStorage.setItem('cag_fav_jobs', JSON.stringify(state.favs));
+      localStorage.setItem('cag_compare_jobs', JSON.stringify(state.compareIds));
+      document.getElementById('fav-count').textContent = state.favs.length;
+      document.getElementById('compare-count').textContent = state.compareIds.length;
+    }
+
+    function showToast(msg, type = 'info') {
+      const box = document.getElementById('toast-box');
+      const div = document.createElement('div');
+      const cls = type === 'success' ? 'bg-emerald-700 text-white' : 'bg-slate-900 text-white';
+      div.className = `px-4 py-2.5 rounded-lg shadow text-xs font-semibold ${cls}`;
+      div.textContent = msg;
+      box.appendChild(div);
+      setTimeout(() => div.remove(), 3000);
+    }
+
+    function getFilteredJobs() {
+      const q = state.search.trim().toLowerCase();
+      return ALL_JOBS.filter((job) => {
+        if (state.onlyFavs && !state.favs.includes(job.id)) return false;
+        if (state.category !== 'ALL' && job.category !== state.category) return false;
+        if (state.qual !== 'ALL') {
+          if (state.qual === 'Beginner Friendly' && !job.beginnerFriendly) return false;
+          if (state.qual !== 'Beginner Friendly' && !job.qualTags.includes(state.qual)) return false;
+        }
+        if (q) {
+          const hay = `${job.id} ${job.title} ${job.category} ${job.qualText} ${job.courseText} ${job.monthlyRange} ${job.skillsList.join(' ')} ${job.softwareList.join(' ')}`.toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      });
+    }
+
+    function renderJobs() {
+      const filtered = getFilteredJobs();
+      document.getElementById('jobs-result-count').textContent = `Showing ${filtered.length} of 100 jobs`;
+      const container = document.getElementById('categories-render-area');
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="bg-white border border-slate-200 rounded-xl p-8 text-center text-slate-600 font-semibold">कोई नौकरी इस फ़िल्टर से मेल नहीं खाई।</div>`;
+        return;
+      }
+
+      const categoryOrder = [
+        { key: 'IT & Software', heading: 'CATEGORY 1: IT & SOFTWARE JOBS (1–25)' },
+        { key: 'Hardware & Networking', heading: 'CATEGORY 2: HARDWARE & NETWORKING JOBS (26–50)' },
+        { key: 'Business & Office', heading: 'CATEGORY 3: BUSINESS & OFFICE SUPPORT JOBS (51–75)' },
+        { key: 'Government Jobs', heading: 'CATEGORY 4: GOVERNMENT & OTHER PROFESSIONAL JOBS (76–100)' }
+      ];
+
+      let html = '';
+      for (const cat of categoryOrder) {
+        const list = filtered.filter((j) => j.category === cat.key);
+        if (list.length === 0) continue;
+
+        html += `
+          <div class="space-y-3.5">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+              <h2 class="text-base sm:text-xl font-extrabold text-slate-900">${cat.heading}</h2>
+              <span class="text-xs font-semibold bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-full">${list.length} Jobs</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+              ${list.map((job) => {
+                const isFav = state.favs.includes(job.id);
+                return `
+                  <div class="job-card p-4 flex flex-col justify-between">
+                    <div>
+                      <div class="flex items-center justify-between gap-2 mb-1.5">
+                        <span class="text-[11px] font-bold bg-slate-100 text-slate-700 px-2 py-0.5 rounded">#${job.id}</span>
+                        <button type="button" onclick="toggleFav(${job.id}, event)" class="text-sm ${isFav ? 'text-amber-500' : 'text-slate-300 hover:text-amber-400'}" title="Save Favourite">★</button>
+                      </div>
+                      <h3 class="text-sm sm:text-base font-bold text-slate-900">${job.title}</h3>
+                      <p class="text-xs text-emerald-700 font-semibold mt-1">मासिक सैलरी: ${job.monthlyRange}</p>
+                      <p class="text-xs text-slate-600 mt-0.5">योग्यता: ${job.qualText}</p>
+                    </div>
+                    <button
+                      type="button"
+                      onclick="openJobDetail(${job.id})"
+                      class="mt-3.5 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs py-2 rounded-lg"
+                    >
+                      View Complete Details (हिंदी में)
+                    </button>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+      }
+      container.innerHTML = html;
+    }
+
+    function filterByCategory(cat) {
+      state.onlyFavs = false;
+      state.category = cat;
+      document.getElementById('category-select').value = cat;
+      renderJobs();
+    }
+
+    function setQuickFilter(cat, qual) {
+      state.onlyFavs = false;
+      state.category = cat;
+      state.qual = qual;
+      document.getElementById('category-select').value = cat;
+      document.getElementById('qual-select').value = qual;
+      renderJobs();
+    }
+
+    function filterFavourites() {
+      state.onlyFavs = !state.onlyFavs;
+      renderJobs();
+      document.getElementById('jobs-section').scrollIntoView({ behavior: 'smooth' });
+      showToast(state.onlyFavs ? 'Showing saved favourite jobs' : 'Showing all jobs');
+    }
+
+    function toggleFav(id, ev) {
+      if (ev) ev.stopPropagation();
+      if (state.favs.includes(id)) {
+        state.favs = state.favs.filter((x) => x !== id);
+        showToast('Favourite से हटाया गया');
+      } else {
+        state.favs.push(id);
+        showToast('Favourite में सेव किया गया', 'success');
+      }
+      savePrefs();
+      renderJobs();
+    }
+
+    function toggleCompare(id) {
+      if (state.compareIds.includes(id)) {
+        state.compareIds = state.compareIds.filter((x) => x !== id);
+        showToast('Compare लिस्ट से हटाया गया');
+      } else {
+        if (state.compareIds.length >= 2) {
+          state.compareIds.shift();
+        }
+        state.compareIds.push(id);
+        showToast('Compare लिस्ट में जोड़ा गया (अधिकतम 2 जॉब्स)', 'success');
+      }
+      savePrefs();
+    }
+
+    function openCompareDrawer() {
+      const modal = document.getElementById('compare-modal-backdrop');
+      const body = document.getElementById('compare-modal-body');
+      if (state.compareIds.length < 2) {
+        body.innerHTML = `<div class="md:col-span-2 text-center text-slate-600 py-6">कृपया तुलना करने के लिए कम से कम 2 नौकरियां चुनें (किसी भी नौकरी के विवरण में <strong>⇄ Compare Job</strong> दबाएं)।</div>`;
+      } else {
+        const pair = state.compareIds.map((id) => ALL_JOBS.find((j) => j.id === id)).filter(Boolean);
+        body.innerHTML = pair.map((j) => `
+          <div class="bg-slate-50 border border-slate-200 rounded-lg p-4 space-y-1.5">
+            <div class="text-base font-extrabold text-slate-900">#${j.id} – ${j.title}</div>
+            <div><strong>Category:</strong> ${j.category}</div>
+            <div><strong>Monthly Salary:</strong> ${j.monthlyRange}</div>
+            <div><strong>Fresher Salary:</strong> ${j.fresherSal}</div>
+            <div><strong>Experienced Salary:</strong> ${j.expSal}</div>
+            <div><strong>Qualification:</strong> ${j.qualText}</div>
+            <div><strong>Course:</strong> ${j.courseText}</div>
+            <div><strong>Skills:</strong> ${j.skillsList.join(', ')}</div>
+          </div>
+        `).join('');
+      }
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeCompareModal() {
+      const modal = document.getElementById('compare-modal-backdrop');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function buildJobDetailHTML(job) {
+      const syllabusHtml = job.syllabusItems.map((s) => `
+        <li class="bg-slate-50 border border-slate-200 rounded-lg p-2.5">
+          <div class="font-bold text-slate-900">${s.topic}</div>
+          <div class="text-slate-600 text-xs mt-0.5">${s.desc}</div>
+        </li>
+      `).join('');
+
+      return `
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 border border-slate-200 rounded-lg p-4">
+          <div><strong class="text-slate-900">1. नौकरी का नाम:</strong> ${job.title}</div>
+          <div><strong class="text-slate-900">4. अनुमानित मासिक सैलरी:</strong> ${job.monthlyRange}</div>
+          <div><strong class="text-slate-900">Fresher Salary:</strong> ${job.fresherSal}</div>
+          <div><strong class="text-slate-900">Experienced Salary:</strong> ${job.expSal}</div>
+          <div class="sm:col-span-2"><strong class="text-slate-900">Estimated Annual Salary:</strong> ${job.annualEst} <span class="text-[11px] text-slate-500">(अनुमानित — स्किल, स्थान, अनुभव और नियोक्ता के अनुसार बदल सकता है)</span></div>
+        </div>
+
+        <div class="space-y-3">
+          <div><strong class="text-blue-700">2. इस नौकरी का मतलब क्या है?</strong><p class="text-slate-700 mt-0.5">${job.meaning}</p></div>
+          <div><strong class="text-blue-700">3. इस नौकरी में क्या काम करना पड़ता है?</strong><p class="text-slate-700 mt-0.5">${job.duties}</p></div>
+          <div><strong class="text-blue-700">5. कौन-कौन सी योग्यता चाहिए?</strong><p class="text-slate-700 mt-0.5">${job.qualText}</p></div>
+          <div><strong class="text-blue-700">6. कौन-सी कंप्यूटर डिग्री या कोर्स उपयोगी है?</strong><p class="text-slate-700 mt-0.5">${job.courseText}</p></div>
+
+          <div>
+            <strong class="text-blue-700 block mb-1.5">7. पूरा Syllabus क्या है? (Complete Syllabus in Hindi)</strong>
+            <ul class="space-y-2">${syllabusHtml}</ul>
+          </div>
+
+          <div><strong class="text-blue-700">8. कौन-कौन से Software सीखने होंगे?</strong><p class="text-slate-700 mt-0.5">${job.softwareList.join(' • ')}</p></div>
+          <div><strong class="text-blue-700">9. कौन-कौन सी Skills जरूरी हैं?</strong><p class="text-slate-700 mt-0.5">${job.skillsList.join(' • ')}</p></div>
+          <div><strong class="text-blue-700">10. इस नौकरी को पाने के लिए तैयारी कैसे करें?</strong><p class="text-slate-700 mt-0.5">${job.preparation}</p></div>
+          <div><strong class="text-blue-700">11. Fresher के लिए क्या अवसर हैं?</strong><p class="text-slate-700 mt-0.5">${job.fresherScope}</p></div>
+          <div><strong class="text-blue-700">12. सरकारी या प्राइवेट नौकरी?</strong><p class="text-slate-700 mt-0.5">${job.sectorType}</p></div>
+          <div><strong class="text-blue-700">13. Career Growth क्या है?</strong><p class="text-slate-700 mt-0.5">${job.careerGrowth}</p></div>
+          <div>
+            <strong class="text-blue-700">14. Interview में किस तरह के सवाल पूछे जा सकते हैं?</strong>
+            <ul class="list-disc list-inside text-slate-700 mt-1 space-y-1">
+              ${job.interviewQuestions.map((q) => `<li>${q}</li>`).join('')}
+            </ul>
+          </div>
+          <div><strong class="text-blue-700">15. इस नौकरी के लिए एक Beginner को कहाँ से शुरुआत करनी चाहिए?</strong><p class="text-slate-700 mt-0.5">${job.beginnerStart}</p></div>
+        </div>
+      `;
+    }
+
+    function openJobDetail(id) {
+      const job = ALL_JOBS.find((j) => j.id === id);
+      if (!job) return;
+      state.activeJobId = id;
+
+      document.getElementById('modal-cat-badge').textContent = `${job.code} • ${job.category}`;
+      document.getElementById('modal-job-title').textContent = job.title;
+      document.getElementById('modal-job-content').innerHTML = buildJobDetailHTML(job);
+
+      const backdrop = document.getElementById('job-modal-backdrop');
+      backdrop.classList.remove('hidden');
+      backdrop.classList.add('flex');
+    }
+
+    function closeJobModal() {
+      const backdrop = document.getElementById('job-modal-backdrop');
+      backdrop.classList.add('hidden');
+      backdrop.classList.remove('flex');
+    }
+
+    document.getElementById('btn-modal-fav').addEventListener('click', () => {
+      if (state.activeJobId) toggleFav(state.activeJobId);
+    });
+
+    document.getElementById('btn-modal-compare').addEventListener('click', () => {
+      if (state.activeJobId) toggleCompare(state.activeJobId);
+    });
+
+    document.getElementById('btn-modal-share').addEventListener('click', () => {
+      const job = ALL_JOBS.find((j) => j.id === state.activeJobId);
+      if (!job) return;
+      const shareText = `COMPUTER ACADEMY GOH – ${job.title} | Salary: ${job.monthlyRange} | Qualification: ${job.qualText}`;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(shareText).then(() => showToast('Job details copied to clipboard!', 'success'));
+      } else {
+        showToast(shareText);
+      }
+    });
+
+    document.getElementById('btn-modal-print').addEventListener('click', () => {
+      const job = ALL_JOBS.find((j) => j.id === state.activeJobId);
+      if (!job) return;
+      const printArea = document.getElementById('print-area');
+      printArea.innerHTML = `
+        <div style="border:1px solid #0f172a; padding:16px; color:#0f172a; background:#fff; font-size:12px;">
+          <div style="border-bottom:1px solid #0f172a; padding-bottom:8px; margin-bottom:10px;">
+            <div style="font-size:18px; font-weight:800;">COMPUTER ACADEMY GOH – ${job.title}</div>
+            <div style="font-size:11px;">Category: ${job.category} | Salary: ${job.monthlyRange} | Qualification: ${job.qualText}</div>
+          </div>
+          <p><strong>मतलब:</strong> ${job.meaning}</p>
+          <p><strong>मुख्य कार्य:</strong> ${job.duties}</p>
+          <p><strong>कोर्स:</strong> ${job.courseText}</p>
+          <p><strong>सिलेबस:</strong> ${job.syllabusItems.map((s) => s.topic).join(', ')}</p>
+          <p><strong>सॉफ्टवेयर:</strong> ${job.softwareList.join(', ')}</p>
+          <p><strong>स्किल्स:</strong> ${job.skillsList.join(', ')}</p>
+          <p><strong>तैयारी व करियर ग्रोथ:</strong> ${job.preparation} ${job.careerGrowth}</p>
+        </div>
+      `;
+      window.print();
+    });
+
+    document.getElementById('btn-modal-pdf').addEventListener('click', async () => {
+      const job = ALL_JOBS.find((j) => j.id === state.activeJobId);
+      if (!job) return;
+      try {
+        showToast('Generating Job Details PDF...', 'info');
+        const temp = document.createElement('div');
+        temp.style.cssText = 'position:fixed; left:-9999px; top:0; width:780px; background:#ffffff; color:#0f172a; padding:24px; font-family:"Noto Sans Devanagari", sans-serif; font-size:13px; line-height:1.5;';
+        temp.innerHTML = `
+          <div style="border-bottom:1px solid #0f172a; padding-bottom:10px; margin-bottom:14px;">
+            <h1 style="margin:0; font-size:20px; font-weight:800;">COMPUTER ACADEMY GOH – ${job.title}</h1>
+            <div style="font-size:12px; margin-top:4px;">${job.category} | मासिक सैलरी: ${job.monthlyRange} | योग्यता: ${job.qualText}</div>
+          </div>
+          <p><strong>2. नौकरी का मतलब:</strong> ${job.meaning}</p>
+          <p><strong>3. मुख्य कार्य:</strong> ${job.duties}</p>
+          <p><strong>6. उपयोगी कोर्स:</strong> ${job.courseText}</p>
+          <p><strong>7. सिलेबस:</strong> ${job.syllabusItems.map((s) => `${s.topic} (${s.desc})`).join(' | ')}</p>
+          <p><strong>8. सॉफ्टवेयर:</strong> ${job.softwareList.join(', ')}</p>
+          <p><strong>9. स्किल्स:</strong> ${job.skillsList.join(', ')}</p>
+          <p><strong>10. तैयारी:</strong> ${job.preparation}</p>
+          <p><strong>13. करियर ग्रोथ:</strong> ${job.careerGrowth}</p>
+        `;
+        document.body.appendChild(temp);
+        const canvas = await html2canvas(temp, { scale: 2, backgroundColor: '#ffffff' });
+        document.body.removeChild(temp);
+
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+        const pageW = pdf.internal.pageSize.getWidth();
+        const pageH = pdf.internal.pageSize.getHeight();
+        const usableW = pageW - 16;
+        const imgH = (canvas.height * usableW) / canvas.width;
+        const imgData = canvas.toDataURL('image/jpeg', 0.92);
+
+        if (imgH <= pageH - 16) {
+          pdf.addImage(imgData, 'JPEG', 8, 8, usableW, imgH);
+        } else {
+          let left = imgH;
+          let pos = 8;
+          pdf.addImage(imgData, 'JPEG', 8, pos, usableW, imgH);
+          left -= (pageH - 16);
+          while (left > 0) {
+            pos = left - imgH + 8;
+            pdf.addPage();
+            pdf.addImage(imgData, 'JPEG', 8, pos, usableW, imgH);
+            left -= (pageH - 16);
+          }
+        }
+
+        const safeFile = `${job.code}-${job.title.replace(/[^a-zA-Z0-9_-]/g, '_')}.pdf`;
+        pdf.save(safeFile);
+        showToast(`Downloaded ${safeFile}`, 'success');
+      } catch (err) {
+        console.error(err);
+        showToast('PDF बनाने में समस्या आई। Print बटन का उपयोग करें।', 'error');
+      }
+    });
+
+    document.getElementById('job-search-input').addEventListener('input', (e) => {
+      state.search = e.target.value;
+      renderJobs();
+    });
+    document.getElementById('category-select').addEventListener('change', (e) => {
+      state.onlyFavs = false;
+      state.category = e.target.value;
+      renderJobs();
+    });
+    document.getElementById('qual-select').addEventListener('change', (e) => {
+      state.onlyFavs = false;
+      state.qual = e.target.value;
+      renderJobs();
+    });
+
+    savePrefs();
+    renderJobs();
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
+  <title>Hello, World!</title>
+</head>
+<body>
+  <h1>
+          Developer by :- Satish kumarravi 
+  </h1>
+</body>
+</html>
